@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="admin.css">
+    <title>Админка</title>
+
+    <style>
+        li {
+            margin-bottom: 10px;
+        }
+        button {
+            margin-left: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Заявки на курсы</h1>
+
+    <h2>Новые заявки</h2>
+    <ul id="requestList"></ul>
+
+    <h2>Принятые заявки</h2>
+    <ul id="acceptedRequestList"></ul>
+
+    <h2>Отклонённые заявки</h2>
+    <ul id="rejectedRequestList"></ul>
+</div>
+
+<script>
+const orders = JSON.parse(localStorage.getItem('orders')) || [];
+
+const requestList = document.getElementById('requestList');
+const acceptedList = document.getElementById('acceptedRequestList');
+const rejectedList = document.getElementById('rejectedRequestList');
+
+function render() {
+    requestList.innerHTML = '';
+    acceptedList.innerHTML = '';
+    rejectedList.innerHTML = '';
+
+    orders.forEach((order, index) => {
+        const li = document.createElement('li');
+        li.innerHTML = `
+            <b>${order.name}</b> — ${order.course} (${order.date} ${order.time})
+        `;
+
+        if (!order.status) {
+            const acceptBtn = document.createElement('button');
+            acceptBtn.textContent = 'Принять';
+            acceptBtn.onclick = () => setStatus(index, 'accepted');
+
+            const rejectBtn = document.createElement('button');
+            rejectBtn.textContent = 'Отклонить';
+            rejectBtn.onclick = () => setStatus(index, 'rejected');
+
+            li.appendChild(acceptBtn);
+            li.appendChild(rejectBtn);
+            requestList.appendChild(li);
+        }
+
+        if (order.status === 'accepted') {
+            acceptedList.appendChild(li);
+        }
+
+        if (order.status === 'rejected') {
+            rejectedList.appendChild(li);
+        }
+    });
+}
+
+function setStatus(index, status) {
+    orders[index].status = status;
+    localStorage.setItem('orders', JSON.stringify(orders));
+    render();
+}
+
+render();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,89 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: rgb(153, 153, 153);
+    margin: 0;
+    padding: 20px;
+}
+.container {
+    max-width: 600px;
+    margin: auto;
+    background: rgb(255, 255, 255, 0.9);
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+h1, h2 {
+    text-align: center;
+}
+form {
+    display: none;
+    display: flex;
+    flex-direction: column;
+}
+label {
+    margin-top: 10px;
+}
+input, select {
+    padding: 10px;
+    margin-top: 5px;
+}
+button {
+    margin-top: 15px;
+    padding: 10px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 5px;
+}
+button:hover {
+    background-color: #218838;
+}
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+li {
+    background: #e9ecef;
+    margin: 10px 0;
+    padding: 10px;
+    border-radius: 5px;
+    display: flex;
+    justify-content: space-between;
+}
+@media (max-width: 390px) {
+    h1 {
+        font-size: 1.5rem;
+    }
+    h2 {
+        font-size: 1.25rem; 
+    }
+    button {
+        font-size: 1rem; 
+        padding: 10px;
+    }
+    input {
+        font-size: 1rem; 
+        padding: 10px;
+    }   
+}
+@media (orientation: landscape) {
+    .registration-form {
+        min-height: 60vh; 
+        max-height: 60vh; 
+        overflow-y: auto; 
+    }
+    h1 {
+        font-size: 2.5rem; 
+    }
+    h2 {
+        font-size: 2rem; 
+    }
+    button {
+        font-size: 1.2rem; 
+        padding: 12px;
+    }
+    textarea, input {
+        font-size: 1.2rem; 
+        padding: 12px; 
+    }
+}

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="seeforms.css">
+    <title>Просмотр заявок</title>
+
+    <style>
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Список курсов</h2>
+    <div id="ordersList"></div>
+
+    <p><a class="Enter" href="forms.html">Создать заявку</a></p>
+</div>
+
+<script>
+const orders = JSON.parse(localStorage.getItem('orders')) || [];
+const container = document.getElementById('ordersList');
+
+if (orders.length === 0) {
+    container.innerHTML = '<p>Курсов пока нет.</p>';
+}
+
+orders.forEach((order, index) => {
+    const div = document.createElement('div');
+    div.className = 'order';
+
+    div.innerHTML = `
+        <p><b>ФИО:</b> ${order.name}</p>
+        <p><b>Дата:</b> ${order.date}</p>
+        <p><b>Время:</b> ${order.time}</p>
+        <p><b>Оплата:</b> ${order.pay}</p>
+        <p><b>Курс:</b> ${order.course}</p>
+        <p><b>Статус:</b> ${order.completed ? 'Пройден' : 'Не пройден'}</p>
+
+        ${order.review ? `<p><b>Отзыв:</b> ${order.review}</p>` : ''}
+
+        <button onclick="markCompleted(${index})">Курс пройден</button>
+
+        <div class="review-box" id="reviewBox${index}" style="display:none;">
+            <textarea id="reviewText${index}" placeholder="Оставьте отзыв"></textarea><br>
+            <button onclick="saveReview(${index})">Сохранить отзыв</button>
+        </div>
+    `;
+    container.appendChild(div);
+});
+
+function markCompleted(index) {
+    orders[index].completed = true;
+    localStorage.setItem('orders', JSON.stringify(orders));
+
+    document.getElementById('reviewBox' + index).style.display = 'block';
+}
+
+function saveReview(index) {
+    const text = document.getElementById('reviewText' + index).value;
+    orders[index].review = text;
+    localStorage.setItem('orders', JSON.stringify(orders));
+
+    alert('Отзыв сохранён!');
+    location.reload();
+}
+</script>
+
+</body>
+</html>

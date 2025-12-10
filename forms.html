@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="forms.css">
+    <title>Формы заявок</title>
+</head>
+<body>
+<div class="container">
+    <h1>Форма заявки на курсы "Корочки.есть"</h1>
+
+    <form id="courseForm">
+        <label>ФИО:</label>
+        <input type="text" id="fullName" required>
+
+        <label>Дата:</label>
+        <input type="date" id="date" required>
+
+        <label>Время:</label>
+        <input type="time" id="time" required>
+
+        <label>Способ оплаты:</label>
+        <select id="pay" required>
+            <option value="">Выберите способ</option>
+            <option value="Наличные">Наличные</option>
+            <option value="Банковская карта">Банковская карта</option>
+        </select>
+
+        <label>Курс:</label>
+        <select id="services" required>
+            <option value="">Выберите курс</option>
+            <option value="Основы алгоритмизации и программирования">Основы алгоритмизации и программирования</option>
+            <option value="Основы веб-дизайна">Основы веб-дизайна</option>
+            <option value="Основы проектирования баз данных">Основы проектирования баз данных</option>
+        </select>
+
+        <button type="submit">Отправить заявку</button>
+    </form>
+
+    <p><a class="Enter" href="seeforms.html">Просмотреть свои заявки</a></p>
+</div>
+
+<script>
+document.getElementById('courseForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    const order = {
+        name: document.getElementById('fullName').value,
+        date: document.getElementById('date').value,
+        time: document.getElementById('time').value,
+        pay: document.getElementById('pay').value,
+        course: document.getElementById('services').value,
+        completed: false,
+        review: '',
+        status: null,
+    };
+
+    let orders = JSON.parse(localStorage.getItem('orders')) || [];
+    orders.push(order);
+    localStorage.setItem('orders', JSON.stringify(orders));
+
+    alert('Заявка сохранена!');
+    window.location.href = 'seeforms.html';
+});
+</script>
+
+</body>
+</html>
