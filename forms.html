@@ -17,9 +17,6 @@
         <label>Дата:</label>
         <input type="date" id="date" required>
 
-        <label>Время:</label>
-        <input type="time" id="time" required>
-
         <label>Способ оплаты:</label>
         <select id="pay" required>
             <option value="">Выберите способ</option>
@@ -45,12 +42,44 @@
 document.getElementById('courseForm').addEventListener('submit', function(e) {
     e.preventDefault();
 
+    const fullNameInput = document.getElementById('fullName');
+    const dateInput = document.getElementById('date');
+    const payInput = document.getElementById('pay');
+    const courseInput = document.getElementById('services');
+
+    const fullName = fullNameInput.value.trim();
+    const date = dateInput.value;
+
+    // Удаляем прошлые ошибки
+    document.querySelectorAll(".error").forEach(el => el.remove());
+
+    let valid = true;
+
+    // --- 1) Проверка ФИО ---
+    const fioRegex = /^[А-ЯЁа-яё ]+$/;
+    if (!fioRegex.test(fullName)) {
+        showError(fullNameInput, "ФИО может содержать только кириллицу и пробелы");
+        valid = false;
+    }
+
+    // --- 2) Проверка даты ---
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);  
+    const selectedDate = new Date(date);
+
+    if (!date || selectedDate < today) {
+        showError(dateInput, "Дата не может быть прошедшей");
+        valid = false;
+    }
+
+    if (!valid) return;
+
+    // --- Сохраняем заявку ---
     const order = {
-        name: document.getElementById('fullName').value,
-        date: document.getElementById('date').value,
-        time: document.getElementById('time').value,
-        pay: document.getElementById('pay').value,
-        course: document.getElementById('services').value,
+        name: fullName,
+        date: date,
+        pay: payInput.value,
+        course: courseInput.value,
         completed: false,
         review: '',
         status: null,
@@ -60,9 +89,21 @@ document.getElementById('courseForm').addEventListener('submit', function(e) {
     orders.push(order);
     localStorage.setItem('orders', JSON.stringify(orders));
 
-    alert('Заявка сохранена!');
+    // Переход после сохранения
     window.location.href = 'seeforms.html';
 });
+
+// Функция показа ошибок под полем
+function showError(input, message) {
+    const div = document.createElement('div');
+    div.className = 'error';
+    div.style.color = 'red';
+    div.style.fontSize = '14px';
+    div.style.marginTop = '4px';
+    div.textContent = message;
+    input.insertAdjacentElement("afterend", div);
+}
+
 </script>
 
 </body>

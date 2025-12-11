@@ -10,14 +10,118 @@
     <div class="registration-form">
         <h2>Регистрация</h2>
         <form id="registrationForm">
-            <input type="text" name="fullName" placeholder="ФИО" required>
-            <input type="tel" name="phone" placeholder="Номер телефона" required>
-            <input type="email" name="email" placeholder="Электронная почта" required>
-            <input type="text" name="username" placeholder="Логин" required> 
-            <input type="password" name="password" placeholder="Пароль" required>
+            <input type="text" id="fullName" placeholder="ФИО" required>
+            <span class="error" id="err-fio"></span>
+
+            <input type="tel" id="phone" placeholder="Номер телефона" required>
+            <span class="error" id="err-phone"></span>
+
+            <input type="email" id="email" placeholder="Email" required>
+            <span class="error" id="err-email"></span>
+
+            <input type="text" id="username" placeholder="Логин" required>
+            <span class="error" id="err-username"></span>
+
+            <input type="password" id="password" placeholder="Пароль" required>
+            <span class="error" id="err-password"></span>
+
+            <p id="success" style="color: green;"></p>
+
             <button type="submit">Зарегистрироваться</button>
             <p>Или уже есть аккаунт? <a class="Enter" href="autorize.html">Войти</a></p>
         </form>
     </div>
 </body>
+<script>
+document.getElementById('registrationForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    // поля
+    const fullName = document.getElementById('fullName').value.trim();
+    const phone = document.getElementById('phone').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const username = document.getElementById('username').value.trim();
+    const password = document.getElementById('password').value;
+
+    // ошибки
+    const errFio = document.getElementById('err-fio');
+    const errPhone = document.getElementById('err-phone');
+    const errEmail = document.getElementById('err-email');
+    const errUsername = document.getElementById('err-username');
+    const errPassword = document.getElementById('err-password');
+    const success = document.getElementById('success');
+
+    // очищаем все ошибки
+    errFio.textContent = '';
+    errPhone.textContent = '';
+    errEmail.textContent = '';
+    errUsername.textContent = '';
+    errPassword.textContent = '';
+    success.textContent = '';
+
+    let valid = true;
+
+    // 1) ФИО — кириллица и пробелы
+    const fioRegex = /^[А-ЯЁа-яё ]+$/;
+    if (!fioRegex.test(fullName)) {
+        errFio.textContent = 'ФИО должно содержать только кириллицу и пробелы.';
+        valid = false;
+    }
+
+    // 2) Телефон — 8(XXX)XXX-XX-XX
+    const phoneRegex = /^8\(\d{3}\)\d{3}-\d{2}-\d{2}$/;
+    if (!phoneRegex.test(phone)) {
+        errPhone.textContent = 'Телефон должен быть в формате 8(XXX)XXX-XX-XX.';
+        valid = false;
+    }
+
+    // 3) Email
+    if (email.length < 5 || !email.includes('@')) {
+        errEmail.textContent = 'Введите корректный email.';
+        valid = false;
+    }
+
+    // 4) Логин — минимум 6 символов, латиница + цифры
+    const usernameRegex = /^[A-Za-z0-9]{6,}$/;
+    if (!usernameRegex.test(username)) {
+        errUsername.textContent = 'Логин — минимум 6 символов, латиница и цифры.';
+        valid = false;
+    }
+
+    // 5) Пароль — минимум 8 символов
+    if (password.length < 8) {
+        errPassword.textContent = 'Пароль должен содержать минимум 8 символов.';
+        valid = false;
+    }
+
+    if (!valid) return;
+
+    // сохраняем пользователя
+    const user = { fullName, phone, email, username, password };
+    let users = JSON.parse(localStorage.getItem('users')) || [];
+
+    // проверка логина
+    if (users.find(u => u.username === username)) {
+        errUsername.textContent = 'Этот логин уже занят.';
+        return;
+    }
+
+    users.push(user);
+    localStorage.setItem('users', JSON.stringify(users));
+
+    success.textContent = 'Регистрация прошла успешно!';
+
+    // очищаем форму
+    document.getElementById('registrationForm').reset();
+
+    // ✔ переходим ТОЛЬКО после успешной регистрации
+    setTimeout(() => {
+        window.location.href = "autorize.html";
+    }, 1000);
+});
+
+
+</script>
+
+
 </html> 

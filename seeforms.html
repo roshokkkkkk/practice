@@ -34,38 +34,37 @@ orders.forEach((order, index) => {
     div.innerHTML = `
         <p><b>ФИО:</b> ${order.name}</p>
         <p><b>Дата:</b> ${order.date}</p>
-        <p><b>Время:</b> ${order.time}</p>
         <p><b>Оплата:</b> ${order.pay}</p>
         <p><b>Курс:</b> ${order.course}</p>
         <p><b>Статус:</b> ${order.completed ? 'Пройден' : 'Не пройден'}</p>
 
         ${order.review ? `<p><b>Отзыв:</b> ${order.review}</p>` : ''}
 
-        <button onclick="markCompleted(${index})">Курс пройден</button>
-
-        <div class="review-box" id="reviewBox${index}" style="display:none;">
+        <!-- Блок отзывов появляется ТОЛЬКО если completed = true -->
+        <div class="review-box" id="reviewBox${index}" style="display:${order.completed && !order.review ? 'block' : 'none'};">
             <textarea id="reviewText${index}" placeholder="Оставьте отзыв"></textarea><br>
             <button onclick="saveReview(${index})">Сохранить отзыв</button>
         </div>
     `;
+
     container.appendChild(div);
 });
 
-function markCompleted(index) {
-    orders[index].completed = true;
-    localStorage.setItem('orders', JSON.stringify(orders));
-
-    document.getElementById('reviewBox' + index).style.display = 'block';
-}
-
 function saveReview(index) {
-    const text = document.getElementById('reviewText' + index).value;
+    const text = document.getElementById('reviewText' + index).value.trim();
+
+    if (text.length === 0) {
+        alert('Отзыв не может быть пустым.');
+        return;
+    }
+
     orders[index].review = text;
     localStorage.setItem('orders', JSON.stringify(orders));
 
     alert('Отзыв сохранён!');
     location.reload();
 }
+
 </script>
 
 </body>
