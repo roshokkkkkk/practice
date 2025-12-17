@@ -42,7 +42,7 @@ function render() {
         // ПЕРВАЯ КАТЕГОРИЯ — НОВЫЕ ЗАЯВКИ
         if (!order.status) {
             const addBtn = document.createElement('button');
-            addBtn.textContent = 'Добавить';
+            addBtn.textContent = 'Начать';
             addBtn.onclick = () => setStatus(index, 'learning');
 
             li.appendChild(addBtn);
@@ -52,7 +52,7 @@ function render() {
         // ВТОРАЯ КАТЕГОРИЯ — ИДЁТ ОБУЧЕНИЕ
         if (order.status === 'learning') {
             const finishBtn = document.createElement('button');
-            finishBtn.textContent = 'Завершено';
+            finishBtn.textContent = 'Завершить';
             finishBtn.onclick = () => setStatus(index, 'completed');
 
             li.appendChild(finishBtn);

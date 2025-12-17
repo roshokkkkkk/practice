@@ -54,3 +54,14 @@ li {
     padding: 10px;
     border-radius: 5px;
 }
+.order{
+    margin-top: 5px;
+    padding: 5px;
+    background-color: rgba(170, 170, 170, 0.4);
+    border-radius: 5px;
+}
+textarea{
+    height: 100px;
+    width: 400px;
+    resize: none;
+}
